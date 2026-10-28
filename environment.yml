@@ -1,0 +1,50 @@
+name: cholera-amr
+# Create with:  mamba env create -f environment.yml
+# Versions are deliberately left unpinned here. After the environment builds
+# and your analysis runs, FREEZE it for reproducibility:
+#   mamba env export --no-builds > environment.lock.yml
+# and commit environment.lock.yml. Cite those versions in the report.
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python>=3.10
+  # data retrieval
+  - sra-tools
+  - ncbi-datasets-cli
+  - entrez-direct
+  - pigz
+  # read QC
+  - fastqc
+  - fastp
+  - multiqc
+  # assembly + assembly QC
+  - shovill
+  - spades
+  - quast
+  - checkm2
+  # identity / typing
+  - mash
+  - fastani
+  - blast
+  - mlst
+  # annotation + AMR
+  - bakta
+  - ncbi-amrfinderplus
+  - abricate
+  # variants + phylogeny
+  - snippy
+  - gubbins
+  - snp-sites
+  - snp-dists
+  - iqtree
+  # workflow
+  - snakemake
+  # R (plotting; if the solver struggles, move these to a separate R env)
+  - r-base
+  - r-tidyverse
+  - r-ape
+  - r-pheatmap
+  - r-ggnewscale
+  - bioconductor-ggtree
+  - r-quarto

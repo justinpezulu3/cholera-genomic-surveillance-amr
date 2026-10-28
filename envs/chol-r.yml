@@ -1,0 +1,15 @@
+name: chol-r
+# Step 6-7: figures and report
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base
+  - r-tidyverse
+  - r-ape
+  - r-pheatmap
+  - r-ggnewscale
+  - r-knitr
+  - r-rmarkdown
+  - bioconductor-ggtree
+  - quarto

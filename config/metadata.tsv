@@ -1,0 +1,9 @@
+isolate_id	sra_run	biosample	bioproject	assembly_accession	country	collection_year	collection_date	isolation_source	platform	layout	role	selection_rationale	serogroup_biotype	phenotype_data_available	notes
+N16961_ref	NA	TODO	TODO	GCF_000006745.1	Bangladesh	1975	TODO	clinical	NA	NA	reference	7th-pandemic O1 El Tor reference genome (2 chromosomes)	O1 El Tor	no	Use for read mapping and SNP calling; verify metadata on NCBI
+ZMB_01	TODO	TODO	TODO	NA	Zambia	TODO	TODO	TODO	Illumina	PAIRED	study	TODO: Zambian outbreak isolate	TODO	TODO	Record why this run was chosen
+ZMB_02	TODO	TODO	TODO	NA	Zambia	TODO	TODO	TODO	Illumina	PAIRED	study	TODO: Zambian isolate from a different year/outbreak	TODO	TODO	
+AFR_01	TODO	TODO	TODO	NA	TODO	TODO	TODO	TODO	Illumina	PAIRED	comparator	TODO: other African country, comparable period	TODO	TODO	
+AFR_02	TODO	TODO	TODO	NA	TODO	TODO	TODO	TODO	Illumina	PAIRED	comparator	TODO: other African country, different period	TODO	TODO	
+GLB_01	TODO	TODO	TODO	NA	TODO	TODO	TODO	TODO	Illumina	PAIRED	comparator	TODO: non-African 7th-pandemic isolate (e.g. South Asia)	TODO	TODO	
+GLB_02	TODO	TODO	TODO	NA	TODO	TODO	TODO	TODO	Illumina	PAIRED	comparator	TODO: Latin America or Caribbean isolate	TODO	TODO	
+OUT_01	TODO	TODO	TODO	NA	TODO	TODO	TODO	TODO	Illumina	PAIRED	outgroup	TODO: non-O1/non-O139 V. cholerae to root the tree	TODO	TODO	

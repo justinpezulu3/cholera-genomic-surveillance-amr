@@ -1,0 +1,14 @@
+name: chol-qc
+# Steps 1-2: data retrieval and read QC
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - sra-tools
+  - ncbi-datasets-cli
+  - entrez-direct
+  - pigz
+  - unzip
+  - fastqc
+  - fastp
+  - multiqc

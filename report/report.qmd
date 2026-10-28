@@ -1,0 +1,157 @@
+---
+title: "Genomic differences and resistance-associated determinants in selected *Vibrio cholerae* isolates"
+subtitle: "A reproducible analysis of public sequencing data"
+author: "Justin"
+date: today
+format:
+  html:
+    toc: true
+    number-sections: true
+    embed-resources: true
+# pdf:                      # requires a LaTeX installation
+#   toc: true
+bibliography: references.bib   # create report/references.bib (Zotero or BibTeX export)
+execute:
+  echo: false
+  warning: false
+---
+
+```{r setup}
+library(tidyverse)
+library(knitr)
+root <- ".."   # report/ is one level below the project root
+p <- function(...) file.path(root, ...)
+fig <- function(name, cap) {
+  f <- p("results/figures", paste0(name, ".png"))
+  if (file.exists(f)) knitr::include_graphics(f) else cat("*Figure not yet generated:", name, "*")
+}
+tab <- function(path, ...) {
+  f <- p(path)
+  if (file.exists(f)) kable(read_tsv(f, show_col_types = FALSE), ...) else cat("*Table not yet generated:", path, "*")
+}
+```
+
+# Abstract
+
+<!-- 150-250 words, written LAST. Question, data (n isolates, sources), methods in one line, 2-3 key findings with numbers, one-line limitation. -->
+
+[TO WRITE]
+
+# Introduction
+
+<!-- Aim ~400-600 words with citations.
+1. Cholera burden and the 7th pandemic (El Tor lineage); relevance to Africa and Zambia.
+2. Why genomic surveillance matters; what public data allow.
+3. Antimicrobial resistance in V. cholerae: acquired genes, SXT/ICE elements, quinolone-associated mutations (gyrA/parC). Cite primary literature; do not rely on memory for specifics.
+4. Aim and research question. State plainly that this is a small analysis of public isolates. -->
+
+[TO WRITE]
+
+# Methods
+
+## Data selection
+
+```{r metadata}
+tab("config/metadata.tsv", caption = "Isolates analysed. Accession, source and rationale per isolate.")
+```
+
+<!-- Describe search strategy, criteria, exclusions (see docs/decisions.md). -->
+
+## Quality control and assembly
+
+<!-- Summarise fastp parameters, Shovill/SPAdes, QUAST, CheckM2, fastANI, MLST and the thresholds used. -->
+
+## Resistance and virulence-associated determinants
+
+<!-- Bakta, AMRFinderPlus (organism option), ABRicate (resfinder, card) and thresholds. State that detection indicates resistance-associated genotype only. -->
+
+## Variant calling and phylogenetic analysis
+
+<!-- Snippy against N16961 and parameters, snippy-core, Gubbins, IQ-TREE model and support values, outgroup handling. -->
+
+## Software and database versions
+
+```{r versions}
+for (f in c("logs/qc_tool_versions.txt", "logs/assembly_tool_versions.txt",
+            "logs/amr_tool_versions.txt", "logs/phylo_tool_versions.txt")) {
+  path <- p(f)
+  if (file.exists(path)) { cat("\n```\n"); cat(readLines(path), sep = "\n"); cat("\n```\n") }
+}
+```
+
+All code, parameters and decisions are in the project repository: [URL].
+
+# Results
+
+## Data quality and assemblies
+
+```{r qc-fig, fig.cap="Sequencing yield and read quality per isolate."}
+fig("fig_qc_reads")
+```
+
+```{r assembly-tab}
+tab("results/assembly_qc/assembly_qc_summary.tsv",
+    caption = "Assembly quality metrics. FLAG indicates a threshold was not met (see Methods).")
+```
+
+<!-- Report how many isolates passed, which were flagged and what you decided. -->
+
+[TO WRITE]
+
+## Resistance-associated determinants
+
+```{r amr-fig, fig.cap="Resistance-associated determinants by drug class (genotype only)."}
+fig("fig_amr_by_class")
+```
+
+<!-- Describe which determinants were found in which isolates, tool agreement, identity and coverage of key hits, and any partial or fragmented hits. Use "resistance-associated", never "resistant". If phenotype data exist, compare explicitly; otherwise say none were available. -->
+
+[TO WRITE]
+
+## Genomic relatedness
+
+```{r tree-fig, fig.cap="Core-genome maximum-likelihood tree with metadata and AMR determinants. Node labels are ultrafast bootstrap support."}
+fig("fig_tree_amr")
+```
+
+```{r snp-fig, fig.cap="Pairwise core SNP distances after recombination masking."}
+fig("fig_snp_distance_heatmap")
+```
+
+<!-- Describe clustering, SNP distances, the effect of recombination masking, and watchlist variants (gyrA, parC, ctxB...) from results/variants/watchlist_variants.tsv. -->
+
+[TO WRITE]
+
+# Discussion
+
+<!-- Interpret in context of published work. Distinguish what the data show from what they suggest.
+Cover: how the AMR profile relates to lineage/geography/time in THESE isolates; consistency with the literature; what phenotype testing would add. -->
+
+[TO WRITE]
+
+# Limitations
+
+<!-- Be specific. Suggested points to keep or edit:
+- Small, non-random sample of public isolates; cannot support claims about Zambian cholera overall.
+- Public-data biases (outbreak-focused sequencing, uneven years and places, metadata gaps).
+- Short-read assemblies fragment mobile elements; absence of a gene is not absence from the isolate.
+- Variants called against a single reference; divergent isolates reduce the shared core.
+- Genotype is not phenotype; no susceptibility testing was performed [unless public data were used].
+- Database versions change; results reflect the versions recorded in Methods. -->
+
+[TO WRITE]
+
+# Conclusions
+
+<!-- 3-5 sentences answering the research question. No claims beyond the data. -->
+
+[TO WRITE]
+
+# Data and code availability
+
+Public accessions are listed in the isolate table. Code, environment and logs: [GitHub URL], release [v1.0].
+
+# References
+
+::: {#refs}
+:::

@@ -1,0 +1,10 @@
+name: chol-amr
+# Step 4: annotation and AMR detection
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - bakta
+  - ncbi-amrfinderplus
+  - abricate
+  - blast

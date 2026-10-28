@@ -1,0 +1,12 @@
+name: chol-phylo
+# Step 5: variant calling and phylogeny
+# If this fails to solve, move gubbins into its own env (chol-gubbins) and tell me.
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - snippy
+  - gubbins
+  - snp-sites
+  - snp-dists
+  - iqtree

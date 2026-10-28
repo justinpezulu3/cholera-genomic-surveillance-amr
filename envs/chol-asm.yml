@@ -1,0 +1,11 @@
+name: chol-asm
+# Step 3: assembly, assembly QC, identity checks (CheckM2 lives in chol-checkm2)
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - shovill
+  - spades
+  - quast
+  - fastani
+  - mlst
