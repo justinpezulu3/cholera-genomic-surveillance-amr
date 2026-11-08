@@ -1,0 +1,17 @@
+results/assembly/fasta/GLB_BGD_2009.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9768	1281	1330
+results/assembly/fasta/GLB_HTI_2010.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9859	1284	1317
+results/assembly/fasta/KEN_2007_HomaBay.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9713	1199	1274
+results/assembly/fasta/KEN_2009_Kiambu.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9867	1228	1271
+results/assembly/fasta/KEN_2015_Kiambu.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9837	1271	1302
+results/assembly/fasta/TZA_2016_Apr.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9819	1273	1303
+results/assembly/fasta/TZA_2017_DarEsSalaam.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9656	1127	1268
+results/assembly/fasta/UGA_2018_Kampala.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.979	1214	1321
+results/assembly/fasta/ZMB_2009_Lus38.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9812	1263	1297
+results/assembly/fasta/ZMB_2016_Lus1033.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9842	1265	1295
+results/assembly/fasta/ZMB_2018_Lus7.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9826	1218	1321
+results/assembly/fasta/ZMB_2020_ZTox.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9768	1269	1300
+results/assembly/fasta/ZMB_2023_EAS_3712.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9818	1278	1309
+results/assembly/fasta/ZMB_2023_LUS_3598.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9834	1273	1307
+results/assembly/fasta/ZMB_2023_NOR_3779.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9831	1276	1307
+results/assembly/fasta/ZMB_2024_CEN_3757.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9873	1277	1308
+results/assembly/fasta/ZMB_2024_COP_3752.fasta	data/reference/GCF_000006745.1/ncbi_dataset/data/GCF_000006745.1/GCF_000006745.1_ASM674v1_genomic.fna	99.9833	1272	1305

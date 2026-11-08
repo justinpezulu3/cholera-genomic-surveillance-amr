@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # 03_assembly.sh
-# De novo assembly (Shovill/SPAdes), assembly QC (QUAST, CheckM2), species/identity
+# De novo assembly (SPAdes --isolate on reads subsampled to ~100x), assembly QC (QUAST, CheckM2), species/identity
 # checks (fastANI vs reference, MLST) and a pass/flag table.
 #
 # Usage:   bash scripts/03_assembly.sh [threads] [ram_gb]
 # Input:   data/trimmed/<isolate>_{1,2}.fastq.gz  (from 02_qc.sh)
 #          data/reference/*/ncbi_dataset/data/*/*.fna  (from 01_download_data.sh)
-# Output:  results/assembly/<isolate>/           Shovill output
+# Output:  results/assembly/<isolate>/           SPAdes output (spades/contigs.fasta etc.)
 #          results/assembly/fasta/<isolate>.fasta  renamed final contigs
 #          results/assembly_qc/quast/            QUAST report
 #          results/assembly_qc/checkm2/          CheckM2 report
@@ -22,6 +22,9 @@
 set -euo pipefail
 
 THREADS="${1:-4}"
+# SPAdes memory cap in GB (-m). It is a safety limit, not a requirement: a 4 Mb genome at 100x
+# normally needs 2-3 GB. 8 is fine on a 5 GB WSL machine because swap backs it.
+# (Shovill was dropped: it refuses --ram < 8 AND --ram > physical RAM, so it cannot run on this laptop.)
 RAM="${2:-8}"
 TRIM="data/trimmed"
 ASM="results/assembly"
@@ -29,17 +32,23 @@ FASTA="${ASM}/fasta"
 QCDIR="results/assembly_qc"
 LOG="logs/assembly.log"
 
-# Shovill parameters (record any change in docs/decisions.md)
+# Assembly parameters (record any change in docs/decisions.md)
 MINLEN=200        # drop contigs shorter than this
 MINCOV=5          # drop contigs with lower coverage than this
+DEPTH=100         # subsample reads to this depth: lowers memory and time, 100x is plenty for a 4 Mb genome
+GENOME_SIZE=4030000   # approx. V. cholerae genome size (N16961), used only to compute subsampling depth
+SEED=100          # fixed seed so subsampling is reproducible
 
 mkdir -p "$ASM" "$FASTA" "$QCDIR"/{quast,checkm2} logs
 log() { echo "[$(date '+%F %T')] $*" | tee -a "$LOG"; }
 
+# Show WHY a step failed (tool output goes to the log file, so it would otherwise be hidden)
+trap 'rc=$?; echo "ERROR: 03_assembly.sh failed (exit $rc) near line $LINENO. Last lines of $LOG:" >&2; tail -n 30 "$LOG" >&2' ERR
+
 {
   echo "# Assembly tool versions ($(date '+%F %T'))"
-  shovill --version 2>&1
   spades.py --version 2>&1 | head -n 2
+  seqtk 2>&1 | sed -n 2p
   quast.py --version 2>&1 | head -n 1
   checkm2 --version 2>&1 | head -n 1
   fastANI --version 2>&1 | head -n 1
@@ -63,13 +72,62 @@ for R1 in "${R1S[@]}"; do
     log "SKIP $ID (assembly exists)"; continue
   fi
 
-  log "Shovill: $ID"
-  # Reads are already trimmed with fastp, so skip Shovill's own trimming (--noreadcorr kept off by default)
-  shovill --R1 "$R1" --R2 "$R2" --outdir "${ASM}/${ID}" \
-    --cpus "$THREADS" --ram "$RAM" \
-    --minlen "$MINLEN" --mincov "$MINCOV" --force >> "$LOG" 2>&1
+  OUT="${ASM}/${ID}"
+  rm -rf "$OUT"; mkdir -p "$OUT"
 
-  cp "${ASM}/${ID}/contigs.fa" "${FASTA}/${ID}.fasta"
+  # (a) Subsample to ~DEPTH x using the base count from fastp (reads were already trimmed in 02_qc.sh)
+  BASES=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["summary"]["after_filtering"]["total_bases"])' "results/qc/fastp/${ID}.json")
+  FRAC=$(awk -v b="$BASES" -v d="$DEPTH" -v g="$GENOME_SIZE" 'BEGIN{f=d*g/b; if(f>1)f=1; printf "%.4f", f}')
+  log "Assembling $ID: ${BASES} bases after trimming, subsampling fraction ${FRAC} (target ${DEPTH}x)"
+  if [[ "$FRAC" == "1.0000" ]]; then
+    S1="$R1"; S2="$R2"
+  else
+    S1="${OUT}/sub_1.fastq.gz"; S2="${OUT}/sub_2.fastq.gz"
+    seqtk sample -s "$SEED" "$R1" "$FRAC" | gzip > "$S1"   # same seed + fraction on both files keeps pairs in sync
+    seqtk sample -s "$SEED" "$R2" "$FRAC" | gzip > "$S2"
+  fi
+
+  # (b) SPAdes in isolate mode (high-coverage single-colony Illumina data)
+  spades.py --isolate -1 "$S1" -2 "$S2" -o "${OUT}/spades" -t "$THREADS" -m "$RAM" >> "$LOG" 2>&1
+
+  # (c) Keep contigs >= MINLEN bp and >= MINCOV x (SPAdes headers: NODE_n_length_L_cov_C); rename tidily
+  python3 - "$ID" "${OUT}/spades/contigs.fasta" "${FASTA}/${ID}.fasta" "$MINLEN" "$MINCOV" <<'PY' | tee -a "$LOG"
+import sys, re
+iso, src, dst, minlen, mincov = sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4]), float(sys.argv[5])
+def records(path):
+    h, s = None, []
+    for line in open(path):
+        if line.startswith(">"):
+            if h is not None: yield h, "".join(s)
+            h, s = line[1:].strip(), []
+        else:
+            s.append(line.strip())
+    if h is not None: yield h, "".join(s)
+kept = dropped = 0
+with open(dst, "w") as out:
+    for h, seq in records(src):
+        m = re.search(r"length_(\d+)_cov_([\d.]+)", h)
+        length, cov = (int(m.group(1)), float(m.group(2))) if m else (len(seq), 0.0)
+        if length < minlen or cov < mincov:
+            dropped += 1; continue
+        kept += 1
+        out.write(f">{iso}_c{kept:03d} len={length} cov={cov:.1f}\n")
+        for i in range(0, len(seq), 80): out.write(seq[i:i+80] + "\n")
+print(f"{iso}: kept {kept} contigs, dropped {dropped} (<{minlen} bp or <{mincov}x)")
+PY
+
+  # (d) Free disk: remove subsampled reads and bulky SPAdes intermediates (keeps contigs, scaffolds, graph, log)
+  rm -f "${OUT}/sub_1.fastq.gz" "${OUT}/sub_2.fastq.gz"
+  rm -rf "${OUT}/spades/corrected" "${OUT}/spades/misc" "${OUT}/spades/tmp" "${OUT}"/spades/K*
+done
+
+# --- 1b. Pre-assembled genomes (data_type=assembly) join the same QC set -----------
+for A in data/assemblies/*.fasta; do
+  [[ -e "$A" ]] || continue
+  AID=$(basename "$A" .fasta)
+  if [[ ! -s "${FASTA}/${AID}.fasta" ]]; then
+    cp "$A" "${FASTA}/${AID}.fasta"; log "Added pre-assembled genome $AID (not assembled here)"
+  fi
 done
 
 FASTAS=("$FASTA"/*.fasta)

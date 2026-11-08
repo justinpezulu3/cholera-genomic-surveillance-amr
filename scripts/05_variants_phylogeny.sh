@@ -72,22 +72,40 @@ for R1 in "${R1S[@]}"; do
   if [[ " $EXCLUDE " == *" $ID "* ]]; then log "EXCLUDED $ID"; continue; fi
   IDS+=("$ID")
 done
+# Pre-assembled genomes (no reads) join through snippy --ctgs
+for A in data/assemblies/*.fasta; do
+  [[ -e "$A" ]] || continue
+  AID=$(basename "$A" .fasta)
+  [[ -s "$TRIM/${AID}_1.fastq.gz" ]] && continue          # reads take priority
+  if [[ " $EXCLUDE " == *" $AID "* ]]; then log "EXCLUDED $AID"; continue; fi
+  # the reference genome itself is not a study isolate
+  [[ "$AID" == "N16961_ref" ]] && continue
+  IDS+=("$AID")
+done
 [[ ${#IDS[@]} -lt 3 ]] && { echo "ERROR: need at least 3 isolates plus the reference for a tree." >&2; exit 1; }
 
 # --- 1. Snippy per isolate ------------------------------------------------------
 for ID in "${IDS[@]}"; do
   if [[ -s "$VAR/snippy/$ID/snps.tab" ]]; then log "SKIP Snippy $ID"; continue; fi
-  log "Snippy: $ID"
-  snippy --outdir "$VAR/snippy/$ID" --ref "$REF" \
-    --R1 "$TRIM/${ID}_1.fastq.gz" --R2 "$TRIM/${ID}_2.fastq.gz" \
-    --cpus "$THREADS" --mincov "$MINCOV" --minfrac "$MINFRAC" --minqual "$MINQUAL" \
-    --force >> "$LOG" 2>&1
+  if [[ -s "$TRIM/${ID}_1.fastq.gz" ]]; then
+    log "Snippy (reads): $ID"
+    snippy --outdir "$VAR/snippy/$ID" --ref "$REF" \
+      --R1 "$TRIM/${ID}_1.fastq.gz" --R2 "$TRIM/${ID}_2.fastq.gz" \
+      --cpus "$THREADS" --mincov "$MINCOV" --minfrac "$MINFRAC" --minqual "$MINQUAL" \
+      --force >> "$LOG" 2>&1
+  else
+    # assembled contigs (e.g. long-read assemblies): variants are called from contigs,
+    # so depth/frequency filters do not apply. Record the platform in the report.
+    log "Snippy (assembled contigs): $ID"
+    snippy --outdir "$VAR/snippy/$ID" --ref "$REF" --ctgs "data/assemblies/${ID}.fasta" \
+      --cpus "$THREADS" --force >> "$LOG" 2>&1
+  fi
 done
 
 # --- 2. Core alignment ----------------------------------------------------------
 log "snippy-core"
 DIRS=(); for ID in "${IDS[@]}"; do DIRS+=("$VAR/snippy/$ID"); done
-( cd "$PHY/core" && snippy-core --ref "$OLDPWD/${REF_FNA:-$REF}" --prefix core \
+( cd "$PHY/core" && snippy-core --ref "$OLDPWD/results/variants/snippy/${IDS[0]}/ref.fa" --prefix core \
     $(for d in "${DIRS[@]}"; do echo "$OLDPWD/$d"; done) >> "$OLDPWD/$LOG" 2>&1 )
 
 CORE_FULL="$PHY/core/core.full.aln"

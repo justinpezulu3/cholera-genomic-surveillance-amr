@@ -1,0 +1,10 @@
+name: chol-snippy
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  # Snippy >= 4.6 is needed: 4.0.2 compares versions as decimals and rejects samtools 1.24.
+  # Kept in its own environment (script 05 appends chol-phylo/bin to PATH for Gubbins,
+  # snp-sites, snp-dists and IQ-TREE).
+  - snippy>=4.6

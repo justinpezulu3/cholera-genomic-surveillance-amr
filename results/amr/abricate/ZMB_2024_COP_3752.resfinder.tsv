@@ -1,0 +1,7 @@
+#FILE	SEQUENCE	START	END	STRAND	GENE	COVERAGE	COVERAGE_MAP	GAPS	%COVERAGE	%IDENTITY	DATABASE	ACCESSION	PRODUCT	RESISTANCE
+results/assembly/fasta/ZMB_2024_COP_3752.fasta	ZMB_2024_COP_3752_c012	70839	71312	+	dfrA1_8	1-474/474	===============	0/0	100.00	100.00	resfinder	X00926	dfrA1	Trimethoprim
+results/assembly/fasta/ZMB_2024_COP_3752.fasta	ZMB_2024_COP_3752_c030	4790	6004	+	FloR_4	1-1215/1215	===============	0/0	100.00	100.00	resfinder	CP136914	FloR	Chloramphenicol;Florfenicol
+results/assembly/fasta/ZMB_2024_COP_3752.fasta	ZMB_2024_COP_3752_c030	6960	7796	-	aph(6)-Id_1	1-837/837	===============	0/0	100.00	100.00	resfinder	M28829	aph(6)-Id	Streptomycin
+results/assembly/fasta/ZMB_2024_COP_3752.fasta	ZMB_2024_COP_3752_c030	7796	8599	-	aph(3'')-Ib_5	1-804/804	===============	0/0	100.00	99.88	resfinder	AF321551	aph(3'')-Ib	Streptomycin
+results/assembly/fasta/ZMB_2024_COP_3752.fasta	ZMB_2024_COP_3752_c030	8660	9475	-	sul2_2	1-816/816	===============	0/0	100.00	100.00	resfinder	AY034138	sul2	Sulfamethoxazole
+results/assembly/fasta/ZMB_2024_COP_3752.fasta	ZMB_2024_COP_3752_c033	679	1308	+	catB9_1	1-630/630	===============	0/0	100.00	100.00	resfinder	AF462019	catB9	Chloramphenicol

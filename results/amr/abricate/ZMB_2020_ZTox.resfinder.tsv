@@ -1,0 +1,3 @@
+#FILE	SEQUENCE	START	END	STRAND	GENE	COVERAGE	COVERAGE_MAP	GAPS	%COVERAGE	%IDENTITY	DATABASE	ACCESSION	PRODUCT	RESISTANCE
+results/assembly/fasta/ZMB_2020_ZTox.fasta	ZMB_2020_ZTox_c011	62896	63369	-	dfrA1_8	1-474/474	===============	0/0	100.00	100.00	resfinder	X00926	dfrA1	Trimethoprim
+results/assembly/fasta/ZMB_2020_ZTox.fasta	ZMB_2020_ZTox_c043	1470	2099	-	catB9_1	1-630/630	===============	0/0	100.00	100.00	resfinder	AF462019	catB9	Chloramphenicol

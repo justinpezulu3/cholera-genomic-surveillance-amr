@@ -1,0 +1,3 @@
+#FILE	SEQUENCE	START	END	STRAND	GENE	COVERAGE	COVERAGE_MAP	GAPS	%COVERAGE	%IDENTITY	DATABASE	ACCESSION	PRODUCT	RESISTANCE
+results/assembly/fasta/UGA_2018_Kampala.fasta	UGA_2018_Kampala_c049	22031	22504	+	dfrA1_8	1-474/474	===============	0/0	100.00	100.00	resfinder	X00926	dfrA1	Trimethoprim
+results/assembly/fasta/UGA_2018_Kampala.fasta	UGA_2018_Kampala_c128	6681	7310	-	catB9_1	1-630/630	===============	0/0	100.00	100.00	resfinder	AF462019	catB9	Chloramphenicol

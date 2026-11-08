@@ -1,0 +1,8 @@
+#FILE	SEQUENCE	START	END	STRAND	GENE	COVERAGE	COVERAGE_MAP	GAPS	%COVERAGE	%IDENTITY	DATABASE	ACCESSION	PRODUCT	RESISTANCE
+results/assembly/fasta/KEN_2007_HomaBay.fasta	KEN_2007_HomaBay_c109	11778	12251	+	dfrA1_8	1-474/474	===============	0/0	100.00	100.00	resfinder	X00926	dfrA1	Trimethoprim
+results/assembly/fasta/KEN_2007_HomaBay.fasta	KEN_2007_HomaBay_c118	1855	2670	+	sul2_2	1-816/816	===============	0/0	100.00	100.00	resfinder	AY034138	sul2	Sulfamethoxazole
+results/assembly/fasta/KEN_2007_HomaBay.fasta	KEN_2007_HomaBay_c118	2731	3534	+	aph(3'')-Ib_5	1-804/804	===============	0/0	100.00	99.88	resfinder	AF321551	aph(3'')-Ib	Streptomycin
+results/assembly/fasta/KEN_2007_HomaBay.fasta	KEN_2007_HomaBay_c118	3534	4370	+	aph(6)-Id_1	1-837/837	===============	0/0	100.00	100.00	resfinder	M28829	aph(6)-Id	Streptomycin
+results/assembly/fasta/KEN_2007_HomaBay.fasta	KEN_2007_HomaBay_c118	5326	6540	-	FloR_4	1-1215/1215	===============	0/0	100.00	100.00	resfinder	CP136914	FloR	Chloramphenicol;Florfenicol
+results/assembly/fasta/KEN_2007_HomaBay.fasta	KEN_2007_HomaBay_c169	679	1308	+	catB9_1	1-630/630	===============	0/0	100.00	100.00	resfinder	AF462019	catB9	Chloramphenicol
+results/assembly/fasta/KEN_2007_HomaBay.fasta	KEN_2007_HomaBay_c169	3227	3856	-	catB9_1	1-630/630	===============	0/0	100.00	100.00	resfinder	AF462019	catB9	Chloramphenicol

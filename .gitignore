@@ -1,0 +1,79 @@
+# raw and intermediate data (regenerate from accessions)
+data/
+tmp/
+results/assembly/
+results/annotation/
+results/variants/snippy/
+results/phylogeny/core/*.aln
+results/phylogeny/gubbins/
+*.fastq
+*.fastq.gz
+*.bam
+*.bai
+*.sra
+
+# keep small results: figures, tables, summaries, tree, logs
+!results/figures/
+!results/tables/
+
+# environments and editor files
+.snakemake/
+.Rproj.user/
+.Rhistory
+.RData
+.DS_Store
+report/report_files/
+report/*.html
+# ---- data: regenerable with scripts/00*_ and 01_download_data.sh ----
+data/
+databases/
+
+# ---- results: keep only small, report-ready outputs ----
+results/*
+!results/figures/
+!results/tables/
+!results/qc/
+!results/assembly_qc/
+!results/amr/
+!results/phylogeny/
+results/phylogeny/*
+!results/phylogeny/iqtree/
+!results/phylogeny/snp_dists_raw.tsv
+!results/phylogeny/snp_dists_masked.tsv
+!results/phylogeny/core/
+results/phylogeny/core/*
+!results/phylogeny/core/core.txt
+!results/phylogeny/gubbins/
+results/phylogeny/gubbins/*
+!results/phylogeny/gubbins/gubbins.recombination_predictions.gff
+!results/phylogeny/gubbins/gubbins.node_labelled.final_tree.tre
+
+# ---- logs: keep only version/session records ----
+logs/*
+!logs/R_sessionInfo.txt
+!logs/phylo_tool_versions.txt
+
+# ---- Windows download markers ----
+*:Zone.Identifier
+*.Zone.Identifier
+
+# ---- misc ----
+*.bak
+.snakemake/
+.Rhistory
+.RData
+
+# ---- bulky intermediate QC output (summaries are kept in the tables) ----
+results/assembly_qc/checkm2/diamond_output/
+results/assembly_qc/checkm2/protein_files/
+results/assembly_qc/quast/icarus_viewers/
+results/qc/multiqc_data/
+*.faa
+results/qc/multiqc/multiqc_data/
+results/qc/fastqc/
+results/qc/raw_fastqc/
+results/qc/trimmed_fastqc/
+results/qc/fastp/
+results/assembly_qc/quast/*
+!results/assembly_qc/quast/report.tsv
+!results/assembly_qc/quast/report.html

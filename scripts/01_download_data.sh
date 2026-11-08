@@ -18,7 +18,7 @@ REF_DIR="data/reference"
 LOG_DIR="logs"
 LOG="${LOG_DIR}/download.log"
 
-mkdir -p "$RAW_DIR" "$REF_DIR" "$LOG_DIR" tmp
+mkdir -p "$RAW_DIR" "$REF_DIR" "$LOG_DIR" data/assemblies tmp
 
 log() { echo "[$(date '+%F %T')] $*" | tee -a "$LOG"; }
 
@@ -33,6 +33,7 @@ log() { echo "[$(date '+%F %T')] $*" | tee -a "$LOG"; }
 # --- locate columns by header name so column order can change -----------------
 col() { head -n 1 "$META" | tr '\t' '\n' | grep -nx "$1" | cut -d: -f1; }
 C_ID=$(col isolate_id); C_RUN=$(col sra_run); C_ASM=$(col assembly_accession); C_ROLE=$(col role)
+C_TYPE=$(col data_type || true)   # 'reads' (default) or 'assembly'
 
 [[ -z "$C_ID" || -z "$C_RUN" || -z "$C_ASM" || -z "$C_ROLE" ]] && {
   echo "ERROR: metadata is missing one of isolate_id, sra_run, assembly_accession, role" >&2; exit 1; }
@@ -45,6 +46,7 @@ tail -n +2 "$META" | while IFS=$'\t' read -r -a F; do
   ASM="${F[$((C_ASM-1))]}"; ROLE="${F[$((C_ROLE-1))]}"
 
   [[ -z "$ID" || "$ID" == \#* ]] && continue
+  TYPE="reads"; [[ -n "$C_TYPE" ]] && TYPE="${F[$((C_TYPE-1))]}"
 
   # ---- reference genome: download assembly, not reads ----
   if [[ "$ROLE" == "reference" ]]; then
@@ -56,6 +58,23 @@ tail -n +2 "$META" | while IFS=$'\t' read -r -a F; do
       --include genome,gff3,gbff --filename "${REF_DIR}/${ASM}.zip" >> "$LOG" 2>&1
     unzip -oq "${REF_DIR}/${ASM}.zip" -d "${REF_DIR}/${ASM}"
     rm -f "${REF_DIR}/${ASM}.zip"
+    continue
+  fi
+
+  # ---- pre-assembled genomes (data_type = assembly): no reads, enter at QC/AMR/phylogeny ----
+  if [[ "$TYPE" == "assembly" ]]; then
+    if [[ -s "data/assemblies/${ID}.fasta" ]]; then
+      log "SKIP assembly ${ID} (already downloaded)"; continue
+    fi
+    if [[ -z "$ASM" || "$ASM" == "TODO" || "$ASM" == "NA" ]]; then
+      log "SKIP ${ID}: no assembly accession filled in yet"; continue
+    fi
+    log "Downloading assembly ${ID} (${ASM})"
+    datasets download genome accession "$ASM" --include genome \
+      --filename "tmp/${ID}.zip" >> "$LOG" 2>&1
+    unzip -oq "tmp/${ID}.zip" -d "tmp/${ID}_asm"
+    cat tmp/"${ID}"_asm/ncbi_dataset/data/*/*.fna > "data/assemblies/${ID}.fasta"
+    rm -rf "tmp/${ID}.zip" "tmp/${ID}_asm"
     continue
   fi
 
