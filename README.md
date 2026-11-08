@@ -24,6 +24,11 @@ A reproducible bacterial-genomics workflow on public *Vibrio cholerae* data, fro
 `scripts/run_all.sh` chains the steps. Each script documents its arguments in its header.
 
 ## Main findings (descriptive)
+
+![Core-genome phylogeny rooted on N16961, with country, site, year and resistance-associated determinants](results/figures/fig_tree_amr.png)
+
+*Core-SNP phylogeny (IQ-TREE 2, recombination masked) with resistance-associated determinants. Genotype only; the tree is rooted on N16961 as a pragmatic root.*
+
 - Isolates aligned to about 96-97% of the reference. After recombination masking the alignment had 247 variable sites (63 parsimony-informative), so tree resolution is limited; only a few clades have strong support.
 - A tight older group of East African, Haitian and earlier Zambian isolates differs by few SNPs. The 2023-24 Zambian isolates fall into two distinct groups about 59-63 SNPs apart, each tens of SNPs from the older group.
 - Determinants present in every isolate: almEFG, catB9, dfrA1, varG and gyrA S83I. parC S85L is present in all but ZMB_2009_Lus38. A cluster of aph(3'')-Ib, aph(6)-Id, sul2 and floR occurs in a subset of isolates.
