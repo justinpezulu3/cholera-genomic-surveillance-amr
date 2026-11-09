@@ -77,3 +77,15 @@ results/qc/fastp/
 results/assembly_qc/quast/*
 !results/assembly_qc/quast/report.tsv
 !results/assembly_qc/quast/report.html
+
+# ---- sensitivity analysis: keep only the small summary files ----
+!results/sensitivity_no_assemblies/
+results/sensitivity_no_assemblies/*
+!results/sensitivity_no_assemblies/core/
+results/sensitivity_no_assemblies/core/*
+!results/sensitivity_no_assemblies/core/core.txt
+!results/sensitivity_no_assemblies/iqtree/
+results/sensitivity_no_assemblies/iqtree/*
+!results/sensitivity_no_assemblies/iqtree/cholera.iqtree
+!results/sensitivity_no_assemblies/iqtree/cholera.treefile
+!results/sensitivity_no_assemblies/snp_dists_masked.tsv

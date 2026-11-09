@@ -116,3 +116,7 @@ Sampling caveat to report: isolates were chosen for spread and data availability
 
 ### Storage
 - Raw FASTQ files were deleted to recover disk space on D: (the WSL virtual disk). They can be regenerated with `scripts/01_download_data.sh`.
+
+### Sensitivity analysis (Nov 2026)
+- Repeated core alignment, Gubbins and IQ-TREE without the three pre-assembled genomes (ZMB_2009_Lus38, ZMB_2016_Lus1033, ZMB_2018_Lus7) and without TZA_2017: 13 isolates plus N16961 (`scripts/07_sensitivity.sh`).
+- Result: 228 variable sites (61 informative) versus 247 (63). The 2023-24 Zambian isolates split into the same two groups (EAS/NOR/CEN and LUS/COP), 60-64 SNPs apart versus 59-63 in the main run. The main conclusion does not depend on the assembled genomes.

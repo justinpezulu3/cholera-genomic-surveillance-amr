@@ -12,9 +12,9 @@ format:
     fig-cap-location: bottom
 ---
 
-# Abstract
+# Abstract {.unnumbered}
 
-**Background.** Genomic surveillance can show how cholera lineages relate to each other and which resistance-associated determinants they carry. **Aim.** To identify genomic differences among a small set of public *Vibrio cholerae* isolates and the resistance-associated genetic determinants in their genomes. **Methods.** Sixteen public genomes (13 analysed from sequencing reads, 3 pre-assembled Lusaka genomes) from Zambia, Kenya, Uganda, Tanzania, Haiti and Bangladesh (2007-2024) were compared with the N16961 reference. Reads were quality-controlled, assembled, and annotated; resistance-associated determinants were called with AMRFinderPlus and ABRicate; variants were called with Snippy, recombination was masked with Gubbins, and a maximum-likelihood tree was inferred with IQ-TREE 2. **Results.** About 96-97% of each genome aligned to the reference. After recombination masking the core alignment held 247 variable sites. Most isolates from 2007-2020 formed a tight group a few SNPs apart, while the Zambian isolates from 2023-24 fell into two distinct groups about 59-63 SNPs apart, each tens of SNPs from the older group. Determinants present in every isolate included *almEFG*, *catB9*, *dfrA1*, *varG* and *gyrA* S83I; *parC* S85L was present in all but one isolate; a cluster of *aph(3'')-Ib*, *aph(6)-Id*, *sul2* and *floR* occurred in a subset. **Conclusions.** The 2023-24 Zambian isolates in this set come from at least two distinct lineages. The sample is small and non-random, resolution is limited, and all resistance findings are genotypic: no phenotype data were available.
+**Background.** Genomic surveillance can show how cholera lineages relate to each other and which resistance-associated determinants they carry. **Aim.** To identify genomic differences among a small set of public *Vibrio cholerae* isolates and the resistance-associated genetic determinants in their genomes. **Methods.** Sixteen public genomes (13 analysed from sequencing reads, 3 pre-assembled Lusaka genomes) from Zambia, Kenya, Uganda, Tanzania, Haiti and Bangladesh (2007-2024) were compared with the N16961 reference. Reads were quality-controlled, assembled, and annotated; resistance-associated determinants were called with AMRFinderPlus and ABRicate; variants were called with Snippy, recombination was masked with Gubbins, and a maximum-likelihood tree was inferred with IQ-TREE 2. **Results.** About 96-97% of each genome aligned to the reference. After recombination masking the core alignment held 247 variable sites. Most isolates from 2007-2020 formed a tight group a few SNPs apart, while the Zambian isolates from 2023-24 fell into two distinct groups about 59-63 SNPs apart, each tens of SNPs from the older group; this grouping was unchanged when the three pre-assembled genomes were excluded. Determinants present in every isolate included *almEFG*, *catB9*, *dfrA1*, *varG* and *gyrA* S83I; *parC* S85L was present in all but one isolate; a cluster of *aph(3'')-Ib*, *aph(6)-Id*, *sul2* and *floR* occurred in a subset. **Conclusions.** The 2023-24 Zambian isolates in this set come from at least two distinct lineages. The sample is small and non-random, resolution is limited, and all resistance findings are genotypic: no phenotype data were available.
 
 # Introduction
 
@@ -26,7 +26,7 @@ This project builds a reproducible workflow on public data to ask: *What genomic
 
 ## Isolates and data
 
-Public isolates were selected from NCBI SRA/ENA to span Zambia, other African countries, and other regions, plus the reference genome N16961 (GCF_000006745.1). Accession numbers, collection dates and locations are recorded in `config/metadata.tsv`. Thirteen isolates were analysed from Illumina reads and three Lusaka genomes (BioProject PRJNA701309) were used as pre-assembled genomes. One further isolate (TZA_2017_DarEsSalaam) was excluded after assembly quality control because its assembly failed four checks: total length 4.47 Mb (above the 4.4 Mb limit), 519 contigs, N50 17.5 kb, and CheckM2 contamination of 14.1%; no MLST sequence type could be assigned. Five other isolates were flagged but retained with caveats (see Section 3.1 and the Limitations).
+Public isolates were selected from NCBI SRA/ENA to span Zambia, other African countries, and other regions, plus the reference genome N16961 (GCF_000006745.1). Accession numbers, collection dates and locations are recorded in `config/metadata.tsv`. Thirteen isolates were analysed from Illumina reads and three Lusaka genomes (BioProject PRJNA701309) were used as pre-assembled genomes. One further isolate (TZA_2017_DarEsSalaam) was excluded after assembly quality control because its assembly failed four checks: total length 4.47 Mb (above the 4.4 Mb limit), 519 contigs, N50 17.5 kb, and CheckM2 contamination of 14.1%; no MLST sequence type could be assigned. Five other isolates were flagged but retained with caveats (see @sec-qc and the Limitations).
 
 ## Read quality control and assembly
 
@@ -40,13 +40,17 @@ Genomes were annotated with Bakta (Schwengers et al., 2021) (light database; ver
 
 Reads (or contigs for the three pre-assembled genomes) were mapped to N16961 with Snippy 4.6.0 (Seemann, GitHub). A core SNP alignment was produced with snippy-core, recombination was detected and masked with Gubbins 3.4.3 (Croucher et al., 2015), and invariant-site-corrected maximum-likelihood trees were inferred with IQ-TREE 2 (Minh et al., 2020) using ModelFinder (Kalyaanamoorthy et al., 2017) with ascertainment-bias correction (`MFP+ASC`) and 1,000 ultrafast bootstrap replicates (Hoang et al., 2018). The tree is displayed rooted on the N16961 reference, which is a pragmatic root: N16961 is itself a seventh-pandemic El Tor isolate and not a true outgroup. Pairwise SNP distances were computed with snp-dists, and figures were drawn in R with ggtree (Yu et al., 2017) and pheatmap.
 
+## Sensitivity analysis
+
+To test whether the three pre-assembled genomes influenced the results, the core-alignment, recombination-masking and tree steps were repeated with those three genomes (and TZA_2017_DarEsSalaam) excluded, leaving 13 read-based isolates plus N16961 (`scripts/07_sensitivity.sh`; outputs in `results/sensitivity_no_assemblies/`).
+
 ## Reproducibility
 
 All scripts, environment specifications and decisions are in the project repository (`scripts/`, `R/`, `envs/`, `docs/decisions.md`). Raw reads and bulky intermediate files are not stored and are regenerated from the accessions.
 
 # Results
 
-## Dataset and assembly quality
+## Dataset and assembly quality {#sec-qc}
 
 All 17 assembled isolates were complete (CheckM2 completeness 99.99-100%) and had 99.97-99.99% ANI to N16961. Eleven passed all thresholds. TZA_2017_DarEsSalaam failed on size, fragmentation, N50 and contamination and was excluded (Methods). Five were flagged but retained: KEN_2007_HomaBay (N50 31.3 kb), ZMB_2009_Lus38 (585 contigs), ZMB_2016_Lus1033 (349 contigs), UGA_2018_Kampala (contamination 7.8%, N50 37.5 kb) and ZMB_2018_Lus7 (contamination 5.2%, 327 contigs). Contamination can add spurious variants or resistance hits, so findings for these isolates carry extra uncertainty; as a partial check, ZMB_2018_Lus7 was identical in core SNPs to ZMB_2020_ZTox, which passed all thresholds.
 
@@ -129,9 +133,25 @@ ZMB_2009_Lus38 carries the wild-type base at the *parC* S85 position, confirmed 
 
 ![Resistance-associated determinants by drug class (AMRFinderPlus).](../results/figures/fig_amr_by_class.png){#fig-class}
 
+## Sensitivity to the pre-assembled genomes {#sec-sens}
+
+Excluding the three pre-assembled Lusaka genomes left the main conclusions unchanged (Table 4). The core alignment kept the same aligned length for every remaining isolate, and the number of variable sites fell from 247 to 228 (61 parsimony-informative). The 2023-24 isolates gained about 6-8 SNPs against N16961 (for example ZMB_2023_EAS_3712 157 to 165), because a few variant sites had previously been lost where the assemblies had gaps. Distances among the older isolates were unchanged, the two 2023-24 groups stayed about 60-64 SNPs apart, and the ZMB_2023_LUS_3598 / ZMB_2024_COP_3752 clade remained fully supported (SH-aLRT 100, ultrafast bootstrap 100).
+
+**Table 4.** Main analysis versus the analysis without pre-assembled genomes.
+
+| Measure | Main (16 isolates) | Without assemblies (13 isolates) |
+|---|---|---|
+| Variable sites | 247 | 228 |
+| Parsimony-informative sites | 63 | 61 |
+| Within EAS / NOR / CEN | 1-4 SNPs | 1-4 SNPs |
+| Within LUS / COP | 2 SNPs | 2 SNPs |
+| Between the two 2023-24 groups | 59-63 SNPs | 60-64 SNPs |
+| EAS / NOR / CEN vs older group | about 28-40 SNPs | about 28-42 SNPs |
+| LUS / COP vs older group | about 31-43 SNPs | about 32-46 SNPs |
+
 # Discussion
 
-**Two lineages among the 2023-24 Zambian isolates.** The five 2023-24 Zambian isolates did not form one cluster: they split into two groups about 60 SNPs apart. Each group is internally tight (1-4 SNPs) and each is tens of SNPs from the older isolates. This is consistent with at least two genetically distinct lineages circulating in Zambia in 2023-24. It does not show how common either lineage is, because the isolates were chosen, not sampled at random. Published estimates of the 7PET substitution rate are a few SNPs per year, so differences of tens of SNPs imply years of divergence and not a single recent outbreak chain; this reading should be tested with dated analyses and more isolates.
+**Two lineages among the 2023-24 Zambian isolates.** The five 2023-24 Zambian isolates did not form one cluster: they split into two groups about 60 SNPs apart. Each group is internally tight (1-4 SNPs) and each is tens of SNPs from the older isolates. This is consistent with at least two genetically distinct lineages circulating in Zambia in 2023-24. The grouping was unchanged when the three pre-assembled genomes were excluded. It does not show how common either lineage is, because the isolates were chosen, not sampled at random. Published estimates of the 7PET substitution rate are a few SNPs per year, so differences of tens of SNPs imply years of divergence and not a single recent outbreak chain; this reading should be tested with dated analyses and more isolates.
 
 **Resistance determinants and mobile elements.** *almEFG*, *catB9*, *varG* and *dfrA1* appeared in every isolate, and *gyrA* S83I was universal in this set. The combination of *aph(3'')-Ib* (strA), *aph(6)-Id* (strB), *sul2* and *floR* is commonly reported on SXT-type integrative conjugative elements in *V. cholerae*; this study did not confirm the element, and its absence from some isolates could be real or could reflect a fragmented element in an assembly. *parC* S85L was present in all but the 2009 Lusaka isolate, which is consistent with that earlier isolate predating the mutation but is based on one genome. GLB_BGD_2009 carried a different set including *qnrVC1* and *tet(59)*.
 
@@ -142,7 +162,7 @@ ZMB_2009_Lus38 carries the wild-type base at the *parC* S85 position, confirmed 
 - Small, non-random sample of public genomes; only five Zambian isolates from 2023-24. The results do not represent cholera in Zambia or elsewhere.
 - Low phylogenetic resolution (247 variable sites, 63 informative); most internal nodes have weak support.
 - N16961 is a pragmatic root and not a true outgroup.
-- Three genomes entered as pre-assembled contigs, not reads, so they are not strictly comparable; a sensitivity analysis without them has not been done.
+- Three genomes entered as pre-assembled contigs, not reads, so they are not strictly comparable; a sensitivity analysis without them gave the same grouping (@sec-sens).
 - KEN_2007_HomaBay had low depth (about 56x after trimming) and many heterozygous calls.
 - Five retained isolates were flagged in assembly QC (fragmentation, low N50, or contamination up to 7.8%); contamination can add spurious variants or resistance hits.
 - The AMRFinderPlus database (2024-07-22.1) is out of date.
