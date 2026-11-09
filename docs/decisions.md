@@ -91,7 +91,7 @@ Sampling caveat to report: isolates were chosen for spread and data availability
 
 ### Isolate selection and exclusions
 - 16 isolates entered the analysis: 13 read-based and 3 pre-assembled Lusaka genomes (PRJNA701309), plus the N16961 reference (GCF_000006745.1).
-- TZA_2017_DarEsSalaam was excluded after assembly QC flagged it. [Fill in the exact reason and metrics from results/assembly_qc/assembly_qc_summary.tsv.]
+- TZA_2017_DarEsSalaam was excluded after assembly QC flagged it. Assembly QC failed four checks: total length 4.47 Mb (limit 4.4 Mb), 519 contigs (limit 300), N50 17.5 kb (minimum 50 kb) and CheckM2 contamination 14.1% (maximum 5%); no MLST type assigned.
 - KEN_2007_HomaBay was kept but flagged: low depth after trimming (about 56x) and many heterozygous calls (8,808).
 - Selection is a convenience set of public isolates. It does not represent all Zambian cholera.
 
